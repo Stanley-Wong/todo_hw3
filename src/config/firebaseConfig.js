@@ -2,19 +2,19 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
 
-// THIS IS USED TO INITIALIZE THE firebase OBJECT
-// PUT YOUR FIREBASE PROJECT CONFIG STUFF HERE
+// Your web app's Firebase configuration
 var firebaseConfig = {
-    apiKey: "AIzaSyCJxkqx-6PMJrZ7ACkrgbO55b5wmJdop1Y",
-    authDomain: "todo-rrf-316.firebaseapp.com",
-    databaseURL: "https://todo-rrf-316.firebaseio.com",
-    projectId: "todo-rrf-316",
-    storageBucket: "todo-rrf-316.appspot.com",
-    messagingSenderId: "892398996038",
-    appId: "1:892398996038:web:1fb9157fc6c5d266e01847",
-    measurementId: "G-TEGQB3MZ23"
+apiKey: "AIzaSyDrLlQisDG7OgJgizzQqXiY-TN5-bKJD28",
+authDomain: "todo-rrf-316-541f1.firebaseapp.com",
+databaseURL: "https://todo-rrf-316-541f1.firebaseio.com",
+projectId: "todo-rrf-316-541f1",
+storageBucket: "todo-rrf-316-541f1.appspot.com",
+messagingSenderId: "564072298094",
+appId: "1:564072298094:web:ad0cd7c4978f10a48ed87f",
+measurementId: "G-E9FT48QLL1"
 };
 firebase.initializeApp(firebaseConfig);
+
 
 // NOW THE firebase OBJECT CAN BE CONNECTED TO THE STORE
 export default firebase;

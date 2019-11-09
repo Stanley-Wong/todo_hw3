@@ -38,3 +38,51 @@ div.banner {
 .home_new_list_button:hover {
   box-shadow: 1px 2px;
 }
+
+#slideButton1{
+  right:0px;
+  background-color: rgb(76, 175, 80);
+  border-radius: 12px;
+  height: 25px;
+  width: 25px;
+  transition: all 0.3s;
+  animation-name: slideInRight1;
+  animation-duration: 0.3s;
+}
+
+@keyframes slideInRight1 {
+  from{right: -30px; opacity: 0;}
+  to{right:0; opacity:1}
+}
+
+#slideButton2{
+  right:0px;
+  background-color: rgb(76, 175, 80);
+  border-radius: 12px;
+  height: 25px;
+  width: 25px;
+  transition: all 0.3s;
+  animation-name: slideInRight2;
+  animation-duration: 0.3s;
+}
+
+@keyframes slideInRight2 {
+  from{right: -20px; opacity: 0;}
+  to{right:0; opacity:1}
+}
+
+#slideButton3{
+  right:0px;
+  background-color: rgb(76, 175, 80);
+  border-radius: 12px;
+  height: 25px;
+  width: 25px;
+  transition: all 0.3s;
+  animation-name: slideInRight3;
+  animation-duration: 0.3s;
+}
+
+@keyframes slideInRight3 {
+  from{right: -10px; opacity: 0;}
+  to{right:0; opacity:1}
+}

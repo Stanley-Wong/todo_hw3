@@ -5,6 +5,9 @@ import { compose } from 'redux';
 import ItemsList from './ItemsList.js'
 import { firestoreConnect } from 'react-redux-firebase';
 
+const headerSize = {
+    height: '30px'
+}
 class ListScreen extends Component {
     state = {
         name: '',
@@ -37,6 +40,13 @@ class ListScreen extends Component {
                 <div className="input-field">
                     <label htmlFor="password">Owner</label>
                     <input className="active" type="text" name="owner" id="owner" onChange={this.handleChange} value={todoList.owner} />
+                </div>
+                <div className="card z-depth-0" style={headerSize}>
+                    <div className="row card-content">
+                        <span className="col s4 card-title">Task</span>
+                        <span className="col s4 card-title">Due Date</span>
+                        <span className="col s4 card-title">Status</span>
+                    </div>
                 </div>
                 <ItemsList todoList={todoList} />
             </div>
