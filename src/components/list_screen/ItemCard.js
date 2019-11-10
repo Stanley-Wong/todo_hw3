@@ -1,4 +1,5 @@
 import React from 'react';
+import { getFirestore } from 'redux-firestore';
 
 const buttonSize = {
     height: '21px',
@@ -38,14 +39,6 @@ const buttonSize3 = {
     
 }
 
-const buttonPos = {
-    position:"relative"
-}
-
-const inline = {
-    display: 'inline'
-}
-
 class ItemCard extends React.Component {
     state = {
         slideButton : false
@@ -71,6 +64,8 @@ class ItemCard extends React.Component {
     resetSlide = () =>{
         this.setState({slideButton:false})
     }
+
+
     render() {
         const { item } = this.props;  
         return (
@@ -80,18 +75,59 @@ class ItemCard extends React.Component {
                     <div className="col s4">
                         <div style={block} onMouseLeave={this.removeButtons}>
                             <div className="greenButton" style={buttonSize} onMouseEnter={this.showButtons} >0</div>
+
                             {this.state.slideButton === true? 
-                            <div id="slideButton1" style={buttonSize1}>✕</div>
+                            <div id="slideButton1" style={buttonSize1} onClick={
+                                (e)=>{
+                                    e.stopPropagation()
+                                    let tempList = this.props.todoList;
+                                    let tempItem = tempList.items;
+                                    let index = tempItem.indexOf(this.props.item);
+                                    if(index!=0){
+                                        let temp = tempItem[index-1];
+                                        tempItem[index-1]=tempItem[index];
+                                        tempItem[index]=temp;
+                                    }
+                                    var firestore = getFirestore();
+                                    firestore.collection('todoLists').doc(this.props.todoList.id).update({items:tempItem});
+                                }}>⇧</div>
                             :null
                             }
+
                             {this.state.slideButton === true? 
-                            <div id="slideButton2" style={buttonSize2}>⇩</div>
+                            <div id="slideButton2" style={buttonSize2} onClick={
+                                (e)=>{
+                                    e.stopPropagation()
+                                    let tempList = this.props.todoList;
+                                    let tempItem = tempList.items;
+                                    let index = tempItem.indexOf(this.props.item);
+                                    if(index!=tempItem.length-1){
+                                        let temp = tempItem[index+1];
+                                        tempItem[index+1]=tempItem[index];
+                                        tempItem[index]=temp;
+                                    }
+                                    var firestore = getFirestore();
+                                    firestore.collection('todoLists').doc(this.props.todoList.id).update({items:tempItem});
+                                }
+                            }>⇩</div>
                             :null
                             }
+
                             {this.state.slideButton === true? 
-                            <div id="slideButton3" style={buttonSize3}>⇧</div>
+                            <div id="slideButton3" style={buttonSize3} onClick={
+                                (e)=>{
+                                    e.stopPropagation()
+                                    let tempList = this.props.todoList;
+                                    let tempItem = tempList.items;
+                                    let index = tempItem.indexOf(this.props.item);
+                                    tempItem.splice(index,1);
+                                    var firestore = getFirestore();
+                                    firestore.collection('todoLists').doc(this.props.todoList.id).update({items:tempItem});
+                                }
+                            }>✕</div>
                             :null
                             }
+
                         </div>
                     </div>
 

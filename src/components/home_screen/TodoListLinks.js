@@ -3,8 +3,13 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import TodoListCard from './TodoListCard';
+import { getFirestore } from 'redux-firestore';
 
 class TodoListLinks extends React.Component {
+
+    orderChange =(currentList)=>{
+        console.log(currentList);
+    }
     render() {
         const todoLists = this.props.todoLists;
         console.log(todoLists);
@@ -12,7 +17,7 @@ class TodoListLinks extends React.Component {
             <div className="todo-lists section">
                 {todoLists && todoLists.map(todoList => (
                     <Link to={'/todoList/' + todoList.id} key={todoList.id}>
-                        <TodoListCard todoList={todoList} />
+                        <TodoListCard todoList={todoList}/>
                     </Link>
                 ))}
             </div>

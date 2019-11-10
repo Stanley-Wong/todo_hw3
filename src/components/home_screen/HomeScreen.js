@@ -4,8 +4,21 @@ import { compose } from 'redux';
 import { NavLink, Redirect } from 'react-router-dom';
 import { firestoreConnect } from 'react-redux-firebase';
 import TodoListLinks from './TodoListLinks'
+import { firestore } from 'firebase';
+import { getFirestore } from 'redux-firestore';
 
 class HomeScreen extends Component {
+
+    handleNewList=()=>{
+        var firestore = getFirestore();
+        firestore.collection('todoLists').add(
+            {
+                name:"Unknown",
+                owner:"Unknown",
+                items:[]
+            }
+        )
+    }
 
     render() {
         if (!this.props.auth.uid) {
