@@ -7,36 +7,31 @@ class EditItem extends Component {
     
     render(){
 
-        const todoListId = this.props.todoListId;
         const todoItemId = this.props.itemId;
         const todoList = this.props.todoList;
-        const todoItem = null;
-        for(let i=0; i<todoList.length; i++){
-            if(todoList[i].id===todoItemId){
-                todoItem=todoList[i];
-                i=todoList.length;
-            }
-        }
-        console.log(todoItem)
+        const todoItem = todoList.items[parseInt(todoItemId)];
+        console.log((todoItem.completed===true));
         return(
             <div className="row container white">
                 <form className="col s12">
                     <div className="input-field col s12">
                         <input placeholder="Description" id="description" type="text" 
-                        /* defaultValue={this.props.todoLists.}  */></input>
+                        defaultValue={todoItem.description} ></input>
                         <label for="description" className="active black-text">description</label>
                     </div>
                     <div className="input-field col s12">
-                        <input placeholder="Due Date" id="due_date" type="text"></input>
+                        <input placeholder="Due Date" id="due_date" type="text"
+                        defaultValue={todoItem.due_date}></input>
                         <label for="due_date" className="active black-text">due date</label>
                     </div>
                     <div className="input-field col s12">
-                        <input placeholder="Assigned To" id="assigned_to" type="text"></input>
+                        <input placeholder="Assigned To" id="assigned_to" type="text"
+                        defaultValue={todoItem.assigned_to}></input>
                         <label for="assigned_to" className="active black-text">assigned to</label>
                     </div>
                     <div className="col s12" style={{height: '50px'}}>
                         <label>
-                            <input type="checkbox" />
+                            {(todoItem.completed===true)?<input type="checkbox" defaultChecked="checked"/>:<input type="checkbox"/>}
                             <span>Completed</span>
                         </label>
                     </div>
@@ -50,24 +45,16 @@ class EditItem extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-
     const todoListId = ownProps.match.params.pathParam1;
     const itemId = ownProps.match.params.pathParam2;
-    const { todoLists } = state.firestore.data;
-    console.log(todoLists);
+    const todoLists = state.firestore.ordered.todoLists;
     const todoList = todoLists[itemId];
-
     return {
-        todoLists: state.firestore.ordered.todoLists,
         auth: state.firebase.auth,
+        todoList,
         todoListId,
         itemId
     };
 };
 
-export default compose(
-    connect(mapStateToProps),
-    firestoreConnect([
-      { collection: 'todoLists' },
-    ]),
-  )(EditItem);
+export default compose(connect(mapStateToProps),firestoreConnect([{ collection: 'todoLists' },]),)(EditItem);
