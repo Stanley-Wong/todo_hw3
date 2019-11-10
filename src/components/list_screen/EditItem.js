@@ -51,13 +51,12 @@ class EditItem extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     
-    const { todoLists } = state.firestore.data;
-    
     const todoListId = ownProps.match.params.pathParam1;
     const itemId = ownProps.match.params.pathParam2;
-
+    const { todoLists } = state.firestore.data;
     const todoList = todoLists[itemId];
-    
+    console.log(todoList);
+
     return {
         todoLists: state.firestore.ordered.todoLists,
         auth: state.firebase.auth,
