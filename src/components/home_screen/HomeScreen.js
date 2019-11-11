@@ -4,7 +4,6 @@ import { compose } from 'redux';
 import { NavLink, Redirect } from 'react-router-dom';
 import { firestoreConnect } from 'react-redux-firebase';
 import TodoListLinks from './TodoListLinks'
-import { firestore } from 'firebase';
 import { getFirestore } from 'redux-firestore';
 
 class HomeScreen extends Component {

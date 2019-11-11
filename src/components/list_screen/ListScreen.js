@@ -30,7 +30,9 @@ class ListScreen extends Component {
 
     sortTask =()=>{
         let tempList = this.props.todoList;
+        console.log(tempList);
         let tempItems = tempList.items;
+        console.log(tempItems);
         tempItems.sort(function(a,b){return a.description.localeCompare(b.description)});
         console.log(tempItems);
         var firestore = getFirestore();

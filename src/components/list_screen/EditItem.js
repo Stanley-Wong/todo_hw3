@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { Link } from 'react-router-dom';
+import { getFirestore } from 'redux-firestore';
 
 class EditItem extends Component {
     state = {
@@ -35,11 +36,18 @@ class EditItem extends Component {
         this.setState({completed:newCompleted});
     }
 
+    changeItem=()=>{
+        let tempList = this.props.todoList.items;
+        let tempItem = tempList[parseInt(this.props.itemActualId)];
+        tempItem.assigned_to=this.state.assignedTo;
+        tempItem.completed=this.state.completed;
+        tempItem.description=this.state.description;
+        tempItem.due_date=this.state.dueDate;
+        var firestore = getFirestore();
+        firestore.collection('todoLists').doc(this.props.todoList.id).update({items:tempList});
+    }
+
     render(){
-        const todoItemId = this.props.itemId;
-        const todoList = this.props.todoList;
-        const todoItem = this.props.todoItem;
-        console.log((todoItem.completed===true));
         return(
             <div className="row container white">
                 <form className="col s12">
@@ -74,7 +82,7 @@ class EditItem extends Component {
                     </div>
                     <div className="col s12" >
                         <Link to={'/todoList/' + this.props.todoListId} key={this.props.todoListId}>
-                            <button className="btn green col s2">Submit</button>
+                            <button className="btn green col s2" onClick={this.changeItem}>Submit</button>
                         </Link>
                         <div className="col s1"></div>
                         <Link to={'/todoList/' + this.props.todoListId} key={this.props.todoListId}>
@@ -99,13 +107,23 @@ const mapStateToProps = (state, ownProps) => {
         }
     }
     const todoList = todoLists[index];
-    const todoItem = todoList.items[parseInt(itemId)];
+    let index1=-1;
+    for(let i=0; i<todoList.items.length; i++){
+        if(todoList.items[i].key===parseInt(itemId)){
+            index1=i;
+            i=todoList.items.length;
+        }
+    }
+    const itemActualId=index1;
+    const todoItem = todoList.items[index1];
+
     return {
         auth: state.firebase.auth,
         todoList,
         todoListId,
         itemId,
-        todoItem
+        todoItem,
+        itemActualId
     };
 };
 

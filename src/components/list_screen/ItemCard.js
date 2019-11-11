@@ -21,22 +21,19 @@ const buttonSize1 = {
     height: '21px',
     width: '21px',
     display: 'inline-block',
-    position: "relative"
-    
+    position: "relative",
 }
 const buttonSize2 = {
     height: '21px',
     width: '21px',
     display: 'inline-block',
-    position: "relative"
-    
+    position: "relative",
 }
 const buttonSize3 = {
     height: '21px',
     width: '21px',
     display: 'inline-block',
-    position: "relative"
-    
+    position: "relative",
 }
 
 class ItemCard extends React.Component {
