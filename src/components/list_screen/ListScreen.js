@@ -5,6 +5,7 @@ import { compose } from 'redux';
 import ItemsList from './ItemsList.js'
 import { firestoreConnect } from 'react-redux-firebase';
 import {getFirestore} from 'redux-firestore';
+import ListDeletePopUp from './ListDeletePopUp.js';
 
 const headerSize = {
     height: '30px'
@@ -17,6 +18,7 @@ class ListScreen extends Component {
     state = {
         name: '',
         owner: '',
+        showDelete:false
     }
 
     handleChange = (e) => {
@@ -65,6 +67,20 @@ class ListScreen extends Component {
         firestore.collection('todoLists').doc(this.props.todoList.id).update({items:tempItems});
     } 
 
+    togglePopUp = () =>{
+        this.setState({showDelete:true});
+    }
+
+    closePopUp = () => {
+        this.setState({showDelete:false});
+    }
+
+    confirmDelete = () =>{
+        this.setState({showDelete:false});
+        var firestore = getFirestore();
+        console.log(firestore.collection('todoLists').doc(this.props.todoList.id))
+        firestore.collection('todoLists').doc(this.props.todoList.id).delete();
+    }
 
     render() {
         const auth = this.props.auth;
@@ -75,14 +91,19 @@ class ListScreen extends Component {
 
         return (
             <div className="container white">
-                <h5 className="grey-text text-darken-3">Todo List</h5>
-                <div className="input-field">
-                    <input type="text" name="name" id="name" onChange={this.handleChange} value={todoList.name} />
-                    <label for="name" className="active">Name</label>
+                <div className="row">
+                    <h5 className="grey-text text-darken-3 col s10">Todo List</h5>
+                    <i class="large material-icons col s2" onClick={this.togglePopUp}>delete_forever</i>
                 </div>
-                <div className="input-field">
-                    <input className="active" type="text" name="owner" id="owner" onChange={this.handleChange} value={todoList.owner} />
-                    <label for="owner" className="active">Owner</label>
+                <div className="row">
+                    <div className="input-field col s6">
+                        <input type="text" name="name" id="name" onChange={this.handleChange} value={todoList.name} />
+                        <label for="name" className="active">Name</label>
+                    </div>
+                    <div className="input-field col s6">
+                        <input className="active" type="text" name="owner" id="owner" onChange={this.handleChange} value={todoList.owner} />
+                        <label for="owner" className="active">Owner</label>
+                    </div>
                 </div>
                 <div className="card z-depth-0" style={headerSize}>
                     <div className="row card-content">
@@ -95,6 +116,13 @@ class ListScreen extends Component {
                 <div className="card z-depth-0 row">
                     <i className="medium material-icons col s12" style={icon} onClick={this.additem}>add_circle_outline</i>
                 </div>
+                {this.state.showDelete ? 
+                    <ListDeletePopUp
+                    rejectDelete={this.closePopUp}
+                    confirmDelete={this.confirmDelete}
+                    />
+                    :null
+                }
             </div>
         );
     }
