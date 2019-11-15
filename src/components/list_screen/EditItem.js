@@ -4,6 +4,7 @@ import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { Link } from 'react-router-dom';
 import { getFirestore } from 'redux-firestore';
+import { NavLink, Redirect } from 'react-router-dom';
 
 class EditItem extends Component {
     state = {
@@ -43,11 +44,30 @@ class EditItem extends Component {
         tempItem.completed=this.state.completed;
         tempItem.description=this.state.description;
         tempItem.due_date=this.state.dueDate;
+        console.log(tempItem.hasOwnProperty('newly'))
+        if(tempItem.hasOwnProperty('newly')){
+            delete tempItem['newly'];
+        }
         var firestore = getFirestore();
-        firestore.collection('todoLists').doc(this.props.todoList.id).update({items:tempList});
+        firestore.collection('todoLists').doc(this.props.todoListId).update({items:tempList});
+    }
+
+    checkNew=()=>{
+        let tempList = this.props.todoList.items;
+        let tempItem = tempList[parseInt(this.props.itemActualId)];
+        if(tempItem.hasOwnProperty('newly')){
+            tempList.pop();
+        }
+        var firestore = getFirestore();
+        firestore.collection('todoLists').doc(this.props.todoListId).update({items:tempList});
     }
 
     render(){
+        console.log(this.props.todoList.items)
+        console.log(this.props.todoList.items[parseInt(this.props.itemActualId)])
+        if (!this.props.auth.uid) {
+            return <Redirect to="/login" />;
+        }
         return(
             <div className="row container white">
                 <form className="col s12">
@@ -85,7 +105,7 @@ class EditItem extends Component {
                             <button className="btn green col s2" onClick={this.changeItem}>Submit</button>
                         </Link>
                         <div className="col s1"></div>
-                        <Link to={'/todoList/' + this.props.todoListId} key={this.props.todoListId}>
+                        <Link to={'/todoList/' + this.props.todoListId} key={this.props.todoListId} onClick={this.checkNew}>
                             <button className="btn red col s2">Cancel</button>
                         </Link>
                     </div>
@@ -96,27 +116,21 @@ class EditItem extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    const todoListId = ownProps.match.params.pathParam1;
-    const itemId = ownProps.match.params.pathParam2;
-    const todoLists = state.firestore.ordered.todoLists;
-    let index=0;
-    for(let i=0; i<todoLists.length; i++){
-        if(todoLists[i].id===todoListId){
-            index=i;
-            i=todoLists.length;
-        }
-    }
-    const todoList = todoLists[index];
+    let todoListId = ownProps.match.params.pathParam1;
+    let itemId = ownProps.match.params.pathParam2;
+    let {todoLists} = state.firestore.data;
+    let todoList = todoLists ? todoLists[todoListId] : null;
     let index1=-1;
     for(let i=0; i<todoList.items.length; i++){
+        console.log(todoList.items[i].key)
         if(todoList.items[i].key===parseInt(itemId)){
+            console.log("found"+todoList.items[i].key+" "+parseInt(itemId));
             index1=i;
             i=todoList.items.length;
         }
     }
-    const itemActualId=index1;
-    const todoItem = todoList.items[index1];
-
+    let itemActualId=index1;
+    let todoItem = todoList.items[index1];
     return {
         auth: state.firebase.auth,
         todoList,

@@ -6,6 +6,8 @@ import ItemsList from './ItemsList.js'
 import { firestoreConnect } from 'react-redux-firebase';
 import {getFirestore} from 'redux-firestore';
 import ListDeletePopUp from './ListDeletePopUp.js';
+import { Link } from 'react-router-dom';
+
 
 const headerSize = {
     height: '30px'
@@ -18,25 +20,25 @@ class ListScreen extends Component {
     state = {
         name: '',
         owner: '',
-        showDelete:false
+        showDelete:false,
+        additem:false
     }
 
     handleChange = (e) => {
         const { target } = e;
-
-        this.setState(state => ({
-            ...state,
-            [target.id]: target.value,
-        }));
+        this.setState({[target.id]: target.value});
+        var firestore = getFirestore();
+        firestore.collection('todoLists').doc(this.props.todoList.id).update({[target.id]: target.value});
     }
 
     sortTask =()=>{
         let tempList = this.props.todoList;
-        console.log(tempList);
         let tempItems = tempList.items;
-        console.log(tempItems);
+        let tempSame = JSON.parse(JSON.stringify(tempItems));
         tempItems.sort(function(a,b){return a.description.localeCompare(b.description)});
-        console.log(tempItems);
+        if((JSON.stringify(tempItems)==JSON.stringify(tempSame))){
+            tempItems = tempItems.reverse();
+        }
         var firestore = getFirestore();
         firestore.collection('todoLists').doc(this.props.todoList.id).update({items:tempItems});
     } 
@@ -44,8 +46,11 @@ class ListScreen extends Component {
     sortDate =()=>{
         let tempList = this.props.todoList;
         let tempItems = tempList.items;
+        let tempSame = JSON.parse(JSON.stringify(tempItems));
         tempItems.sort(function(a,b){return a.due_date.localeCompare(b.due_date)});
-        console.log(tempItems);
+        if((JSON.stringify(tempItems)==JSON.stringify(tempSame))){
+            tempItems = tempItems.reverse();
+        }
         var firestore = getFirestore();
         firestore.collection('todoLists').doc(this.props.todoList.id).update({items:tempItems});
     } 
@@ -53,16 +58,19 @@ class ListScreen extends Component {
     sortCompleted =()=>{
         let tempList = this.props.todoList;
         let tempItems = tempList.items;
+        let tempSame = JSON.parse(JSON.stringify(tempItems));
         tempItems.sort(function(a,b){
             if(a.completed===true&&b.completed===false)
-              return -1;   
+                return -1;   
             else if(a.completed===false&&b.completed===true)
-              return 1;
+                return 1;
             else
-              return 0;
+                return 0;
             }
-          );
-        console.log(tempItems);
+            );
+        if((JSON.stringify(tempItems)==JSON.stringify(tempSame))){
+            tempItems = tempItems.reverse();
+        }
         var firestore = getFirestore();
         firestore.collection('todoLists').doc(this.props.todoList.id).update({items:tempItems});
     } 
@@ -82,13 +90,28 @@ class ListScreen extends Component {
         firestore.collection('todoLists').doc(this.props.todoList.id).delete();
     }
 
+    additem=()=>{
+        let tempList = this.props.todoList;
+        let tempItems = tempList.items;
+        tempItems.push({
+            assigned_to:"Unknown",
+            completed:false,
+            description:"Unknown",
+            due_date:"",
+            key:tempItems.length,
+            id:tempItems.length,
+            newly:true
+        });
+        var firestore = getFirestore();
+        firestore.collection('todoLists').doc(this.props.todoList.id).update({items:tempItems});
+    }
+
     render() {
         const auth = this.props.auth;
         const todoList = this.props.todoList;
         if (!auth.uid) {
             return <Redirect to="/" />;
         }
-
         return (
             <div className="container white">
                 <div className="row">
@@ -97,11 +120,11 @@ class ListScreen extends Component {
                 </div>
                 <div className="row">
                     <div className="input-field col s6">
-                        <input type="text" name="name" id="name" onChange={this.handleChange} value={todoList.name} />
+                        <input type="text" name="name" id="name" onChange={this.handleChange} defaultValue={todoList.name} />
                         <label for="name" className="active">Name</label>
                     </div>
                     <div className="input-field col s6">
-                        <input className="active" type="text" name="owner" id="owner" onChange={this.handleChange} value={todoList.owner} />
+                        <input className="active" type="text" name="owner" id="owner" onChange={this.handleChange} defaultValue={todoList.owner} />
                         <label for="owner" className="active">Owner</label>
                     </div>
                 </div>
@@ -114,7 +137,10 @@ class ListScreen extends Component {
                 </div>
                     <ItemsList todoList={todoList} />
                 <div className="card z-depth-0 row">
-                    <i className="medium material-icons col s12" style={icon} onClick={this.additem}>add_circle_outline</i>
+                    <Link to={'/todoList/'+this.props.todoList.id+'/item/'+this.props.todoList.items.length}
+                    onClick={this.additem}>
+                        <i className="medium material-icons col s12" style={icon}>add_circle_outline</i>
+                    </Link>
                 </div>
                 {this.state.showDelete ? 
                     <ListDeletePopUp
