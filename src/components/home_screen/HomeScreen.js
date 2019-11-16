@@ -7,16 +7,27 @@ import TodoListLinks from './TodoListLinks'
 import { getFirestore } from 'redux-firestore';
 
 class HomeScreen extends Component {
+    state={
+        newLink:"",
+        redirect:false
+    }
 
     handleNewList=()=>{
         var firestore = getFirestore();
-        firestore.collection('todoLists').add(
+        var newItemRef = firestore.collection('todoLists').doc();
+        newItemRef.set(
             {
                 name:"Unknown",
                 owner:"Unknown",
-                items:[]
+                items:[],
+                timeStamp:new Date()
             }
         )
+    }
+
+    statesShow=()=>{
+        console.log(this.state.newLink)
+        console.log(this.state.redirect)
     }
 
     render() {
@@ -38,10 +49,15 @@ class HomeScreen extends Component {
                         </div>
                         <div>&nbsp;</div>
                         <div className="home_new_list_container">
-                                <button className="home_new_list_button" onClick={this.handleNewList}>
-                                    Create a New To Do List
-                                </button>
+
+                        <button className="home_new_list_button" onClick={this.handleNewList}>
+                            Create a New To Do List
+                        </button>
+
                         </div>
+                        <button onClick={this.statesShow}>
+                                states
+                        </button>
                     </div>
                 </div>
             </div>

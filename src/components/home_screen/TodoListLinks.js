@@ -7,16 +7,16 @@ import { getFirestore } from 'redux-firestore';
 
 class TodoListLinks extends React.Component {
 
-    orderChange =(currentList)=>{
-        console.log(currentList);
-    }
     render() {
         const todoLists = this.props.todoLists;
-        console.log(todoLists);
         return (
             <div className="todo-lists section">
-                {todoLists && todoLists.map(todoList => (
-                    <Link to={'/todoList/' + todoList.id} key={todoList.id}>
+                {todoLists && todoLists.sort(function(a,b){return a.timeStamp<b.timeStamp}).map(todoList => (
+                    <Link to={'/todoList/' + todoList.id} key={todoList.id} onClick={()=>{
+                            var firestore=getFirestore();
+                            firestore.collection('todoLists').doc(todoList.id).update({"timeStamp": new Date()});
+                        }
+                        }>
                         <TodoListCard todoList={todoList}/>
                     </Link>
                 ))}
