@@ -9,22 +9,22 @@ import { getFirestore } from 'redux-firestore';
 class HomeScreen extends Component {
     state={
         newLink:"",
-        redirect:false
     }
 
     handleNewList=()=>{
         var firestore = getFirestore();
-        var newItemRef = firestore.collection('todoLists').doc();
-        newItemRef.set(
-            {
-                name:"Unknown",
-                owner:"Unknown",
-                items:[],
-                timeStamp:new Date()
-            }
-        )
+        var newList = {
+            name:"Unknown",
+            owner:"Unknown",
+            items:[],
+            timeStamp:new Date()
+        }
+        firestore.collection('todoLists').add(newList).then(promise =>{
+            newList.id = promise.id;
+            this.setState({newLink:newList.id});
+        })
     }
-
+    
     statesShow=()=>{
         console.log(this.state.newLink)
         console.log(this.state.redirect)
@@ -34,7 +34,9 @@ class HomeScreen extends Component {
         if (!this.props.auth.uid) {
             return <Redirect to="/login" />;
         }
-
+        if(this.state.newLink!=""){
+            return <Redirect to={"todoList/"+this.state.newLink}/>
+        }
         return (
             <div className="dashboard container">
                 <div className="row">
