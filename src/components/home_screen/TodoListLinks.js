@@ -6,7 +6,7 @@ import TodoListCard from './TodoListCard';
 import { getFirestore } from 'redux-firestore';
 
 class TodoListLinks extends React.Component {
-
+    
     render() {
         const todoLists = this.props.todoLists;
         return (

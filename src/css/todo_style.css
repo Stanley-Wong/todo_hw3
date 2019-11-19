@@ -55,9 +55,41 @@ div.banner {
   to{right:0; opacity:1}
 }
 
+#slideButton1D{
+  right:0px;
+  background-color: rgb(128,128,128);
+  border-radius: 12px;
+  height: 25px;
+  width: 25px;
+  transition: all 0.3s;
+  animation-name: slideInRight1;
+  animation-duration: 0.3s;
+}
+
+@keyframes slideInRight1 {
+  from{right: -30px; opacity: 0;}
+  to{right:0; opacity:1}
+}
+
 #slideButton2{
   right:0px;
   background-color: rgb(30,144,255);
+  border-radius: 12px;
+  height: 25px;
+  width: 25px;
+  transition: all 0.3s;
+  animation-name: slideInRight2;
+  animation-duration: 0.3s;
+}
+
+@keyframes slideInRight2 {
+  from{right: -20px; opacity: 0;}
+  to{right:0; opacity:1}
+}
+
+#slideButton2D{
+  right:0px;
+  background-color: rgb(128,128,128);
   border-radius: 12px;
   height: 25px;
   width: 25px;

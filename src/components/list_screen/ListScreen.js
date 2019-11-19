@@ -21,7 +21,7 @@ class ListScreen extends Component {
         name: '',
         owner: '',
         showDelete:false,
-        additem:false
+        additem:false,
     }
 
     handleChange = (e) => {
@@ -98,8 +98,8 @@ class ListScreen extends Component {
             completed:false,
             description:"Unknown",
             due_date:"",
-            key:tempItems.length,
-            id:tempItems.length,
+            key:(parseInt(tempItems.length)+parseInt(10)),
+            id:(parseInt(tempItems.length)+parseInt(10)),
             newly:true
         });
         var firestore = getFirestore();
@@ -107,10 +107,10 @@ class ListScreen extends Component {
     }
 
     render() {
-        const auth = this.props.auth;
         const todoList = this.props.todoList;
+        const auth = this.props.auth;
         if (!auth.uid) {
-            return <Redirect to="/" />;
+            return <Redirect to="/login" />;
         }
         return (
             <div className="container white">
@@ -137,7 +137,7 @@ class ListScreen extends Component {
                 </div>
                     <ItemsList todoList={todoList} />
                 <div className="card z-depth-0 row">
-                    <Link to={'/todoList/'+this.props.todoList.id+'/item/'+this.props.todoList.items.length}
+                    <Link to={'/todoList/'+this.props.todoList.id+'/item/'+(parseInt(this.props.todoList.items.length)+parseInt(10))}
                     onClick={this.additem}>
                         <i className="medium material-icons col s12" style={icon}>add_circle_outline</i>
                     </Link>

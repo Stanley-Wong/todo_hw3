@@ -10,7 +10,7 @@ class HomeScreen extends Component {
     state={
         newLink:"",
     }
-
+    
     handleNewList=()=>{
         var firestore = getFirestore();
         var newList = {
@@ -36,6 +36,7 @@ class HomeScreen extends Component {
             <div className="dashboard container">
                 <div className="row">
                     <div className="col s12 m4">
+                        <div style={{fontSize:'35px'}}>Lists:</div>
                         <TodoListLinks />
                     </div>
 

@@ -49,7 +49,8 @@ class ItemCard extends React.Component {
     state = {
         slideButton : false
     }
-    showButtons = () => {
+    showButtons = (e) => {
+        e.preventDefault();
         this.setState({slideButton:true});
     }
 
@@ -57,9 +58,27 @@ class ItemCard extends React.Component {
         var btn1=document.getElementById("slideButton1");
         var btn2=document.getElementById("slideButton2");
         var btn3=document.getElementById("slideButton3");
+        var btn1D=document.getElementById("slideButton1D");
+        var btn2D=document.getElementById("slideButton2D");
         if(btn1!=null && btn2!=null && btn3!=null){
             btn1.style.right='-15px';
             btn1.style.opacity='0';
+            btn2.style.right='-15px';
+            btn2.style.opacity='0';
+            btn3.style.right='-10px';
+            btn3.style.opacity='0';
+        }
+        else if(btn1!=null && btn2D!=null && btn3!=null){
+            btn1.style.right='-15px';
+            btn1.style.opacity='0';
+            btn2D.style.right='-15px';
+            btn2D.style.opacity='0';
+            btn3.style.right='-10px';
+            btn3.style.opacity='0';
+        }
+        else if(btn1D!=null && btn2!=null && btn3!=null){
+            btn1D.style.right='-15px';
+            btn1D.style.opacity='0';
             btn2.style.right='-15px';
             btn2.style.opacity='0';
             btn3.style.right='-10px';
@@ -114,6 +133,8 @@ class ItemCard extends React.Component {
 
     render() {
         const { item } = this.props;  
+        console.log(this.props.todoList.items.indexOf(this.props.item));
+        console.log(this.props.item)
         return (
             <div className="card todo-list-link pink-lighten-3" style={{borderRadius: '30px'}} onClick={this.change}>
                 <div className="row card-content grey-text text-darken-3">
@@ -123,17 +144,26 @@ class ItemCard extends React.Component {
                             <div className="greenButton" style={buttonSize} onMouseEnter={this.showButtons} >
                                 <i class="material-icons">border_color</i>
                             </div>
-                            {this.state.slideButton === true? 
-                            <div id="slideButton1" style={buttonSize1} onClick={this.moveUp}>
+                            {this.state.slideButton === true? (
+                                (this.props.todoList.items.indexOf(this.props.item)!==0)?
+                                (<div id="slideButton1" style={buttonSize1} onClick={this.moveUp}>
                                     <i class="material-icons">arrow_upward</i>
-                                </div>
+                                </div>):
+                                (<div id="slideButton1D" style={buttonSize1} onClick={(e)=>{e.preventDefault()}}>
+                                <i class="material-icons">arrow_upward</i>
+                                </div>)
+                            )
                             :null
                             }
-
-                            {this.state.slideButton === true? 
-                            <div id="slideButton2" style={buttonSize2} onClick={this.moveDown}>
-                                <i class="material-icons">arrow_downward</i>
-                            </div>
+                            {this.state.slideButton === true? (
+                                (this.props.todoList.items.indexOf(this.props.item)!==this.props.todoList.items.length-1)?
+                                (<div id="slideButton2" style={buttonSize2} onClick={this.moveDown}>
+                                    <i class="material-icons">arrow_downward</i>
+                                </div>):
+                                (<div id="slideButton2D" style={buttonSize2} onClick={(e)=>{e.preventDefault()}}>
+                                    <i class="material-icons">arrow_downward</i>
+                                </div>)
+                            ) 
                             :null
                             }
                             {this.state.slideButton === true? 
