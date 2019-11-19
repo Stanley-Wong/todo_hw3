@@ -24,11 +24,6 @@ class HomeScreen extends Component {
             this.setState({newLink:newList.id});
         })
     }
-    
-    statesShow=()=>{
-        console.log(this.state.newLink)
-        console.log(this.state.redirect)
-    }
 
     render() {
         if (!this.props.auth.uid) {
@@ -51,15 +46,10 @@ class HomeScreen extends Component {
                         </div>
                         <div>&nbsp;</div>
                         <div className="home_new_list_container">
-
-                        <button className="home_new_list_button" onClick={this.handleNewList}>
-                            Create a New To Do List
-                        </button>
-
+                            <button className="home_new_list_button" onClick={this.handleNewList}>
+                                Create a New To Do List
+                            </button>
                         </div>
-                        <button onClick={this.statesShow}>
-                                states
-                        </button>
                     </div>
                 </div>
             </div>
